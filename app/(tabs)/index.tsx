@@ -6,7 +6,7 @@ import { Text, View } from '@/components/Themed';
 export default function TabOneScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Vehicle Details</Text>
+      <Text style={styles.title}>RemoveAList</Text>
 
     </View>
   );
