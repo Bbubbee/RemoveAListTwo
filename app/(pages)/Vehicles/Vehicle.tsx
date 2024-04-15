@@ -3,6 +3,7 @@ import React, { SetStateAction } from 'react'
 import { Text, View } from '@/components/Themed';
 import { Button, Linking, Pressable, StyleSheet, TextInput } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 
 import { SelectList } from 'react-native-dropdown-select-list'
@@ -23,6 +24,10 @@ const Vehicle = () => {
 
   function handle_press() {
     console.log(regoNumber);
+
+    // Go to Vehicle Information Page
+    router.back()
+    router.push("/(pages)/Vehicles/VehicleInfo")
 
     return
 
@@ -62,9 +67,15 @@ const Vehicle = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Vehicle Details</Text>
+
       <Text style={styles.body}>
-        Select your state from the drop down menu below.
+        Enter Your Vehicle Identification Number (VIN)
+      </Text>
+      <TextInput style={styles.input} onChangeText={newText => { setRegoNumber(newText) }} />
+
+
+      <Text style={styles.body}>
+        Select Your State
       </Text>
 
 
@@ -75,20 +86,18 @@ const Vehicle = () => {
           data={data}
           save="value"
           defaultOption={{ key: '1', value: 'New South Wales' }}
-          boxStyles={{ width: '100%' }}
+          boxStyles={{ width: '100%', backgroundColor: 'white', borderColor: '#757575' }}
+          dropdownStyles={{ backgroundColor: 'white', }}
         />
       </View>
 
-      <Text style={styles.body}>Please enter your vehicle rego details:</Text>
-
-      <TextInput style={styles.input} onChangeText={newText => { setRegoNumber(newText) }}>
-      </TextInput>
-
 
       <Pressable onPress={() => handle_press()} style={styles.lookupButton} >
-        <Text style={styles.text}>Lookup</Text>
+        <Text style={styles.buttonText}>Lookup</Text>
         <FontAwesome6 name="magnifying-glass-arrow-right" size={24} color="white" />
       </Pressable>
+
+
     </View>
   )
 }
@@ -97,16 +106,18 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 10,
     height: 40,
-    borderWidth: 1,
     width: '100%',
-    borderRadius: 10,
+    borderRadius: 1,
     padding: 10,
+    backgroundColor: "white",
   },
 
   container: {
     flex: 1,
     alignItems: 'flex-start',
-    padding: 15
+    padding: 20,
+    paddingHorizontal: 25,
+    backgroundColor: '#E8E6E6'
   },
 
   title: {
@@ -116,24 +127,27 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    marginTop: 10
+    marginTop: 30,
+    fontWeight: 'bold',
   },
 
   lookupButton: {
-    marginTop: 10,
+    marginTop: 35,
 
-    backgroundColor: 'black',
+    backgroundColor: '#276FB1',
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 5,
+    borderRadius: 15,
     alignItems: 'center',
     elevation: 3,
     flexDirection: 'row',
     gap: 8,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+
+    alignSelf: 'center',
   },
 
-  text: {
+  buttonText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
@@ -142,7 +156,8 @@ const styles = StyleSheet.create({
   },
 
   stateContainer: {
-    marginTop: 10
+    marginTop: 15,
+    backgroundColor: '#E8E6E6',
   }
 });
 

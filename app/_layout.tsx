@@ -51,7 +51,11 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(pages)/Vehicle" options={{ title: "Vehicle", headerBackTitle: 'Back' }} />
+        {/* Vehicles */}
+        <Stack.Screen name="(pages)/Vehicles/VehicleHome" options={{ title: "Vehicles/Vessels", headerBackTitle: 'Back' }} />
+        <Stack.Screen name="(pages)/Vehicles/Vehicle" options={{ title: "Vehicle", headerBackTitle: 'Back' }} />
+        <Stack.Screen name="(pages)/Vehicles/VehicleInfo" options={{ title: "Vehicle Info", headerBackTitle: 'Back' }} />
+        {/* Custom Header: options = {{headerTitle: () => <Header />}} */}
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>
