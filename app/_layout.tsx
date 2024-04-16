@@ -53,7 +53,7 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         {/* Vehicles */}
         <Stack.Screen name="(pages)/Vehicles/VehicleHome" options={{ title: "Vehicles/Vessels", headerBackTitle: 'Back' }} />
-        <Stack.Screen name="(pages)/Vehicles/Vehicle" options={{ title: "Vehicle", headerBackTitle: 'Back' }} />
+        <Stack.Screen name="(pages)/Vehicles/NewVehicle" options={{ title: "Vehicle", headerBackTitle: 'Back' }} />
         <Stack.Screen name="(pages)/Vehicles/VehicleInfo" options={{ title: "Vehicle Info", headerBackTitle: 'Back' }} />
         {/* Custom Header: options = {{headerTitle: () => <Header />}} */}
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
