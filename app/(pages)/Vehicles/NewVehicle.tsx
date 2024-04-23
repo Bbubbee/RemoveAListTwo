@@ -4,10 +4,14 @@ import { Text, View } from '@/components/Themed';
 import { Button, Linking, Pressable, StyleSheet, TextInput } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import axios from 'axios'; 
+import axios from 'axios';
+
+import { Buffer } from "buffer";
 
 
 import { SelectList } from 'react-native-dropdown-select-list'
+
+
 
 
 
@@ -25,26 +29,40 @@ const NewVehicle = () => {
     { key: '6', value: 'South Australia' },
   ]
 
-  async function handle_press() {
-    // Get access token. 
-    
-    // Need header 
+  function encodeToBase64(toEncode: string) {
+    const Buffer = require("buffer").Buffer;
+    const encodedString = new Buffer(toEncode).toString('base64');
 
-    const accessTokenUrl = "https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken?grant_type=client_credentials"
-    console.log(accessTokenUrl);
-    
+    return encodedString;
+  }
+
+  async function handle_press() {
+
+    // TODO: Might only need to get access token once. 
+    // Variables to get access token. 
+    const accessTokenUrl = "https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken?grant_type=client_credentials";
+    const apiKey = "O4DgzjFyGAEMHSdhNuEgulu7Ln2D3NkE";
+    const apiSecret = "hsLAJStVQCGAUj8W";
+    const credentials = apiKey + ":" + apiSecret;
+
+    // Try and get access token.
     try {
       const result = await axios.get(accessTokenUrl, {
-        headers: {
-          'Authorization': process.env.EXPO_PUBLIC_API_KEY
-        }
+        headers: { 'Authorization': "Basic " + encodeToBase64(credentials) }
       });
       console.log(result.data);
+
+      // Success getting access token! 
+      const accessToken = result.data['access_token']
+      console.log(accessToken);
+
+      // Try and get 
+
+      // Failed to get access token. 
     } catch (error) {
-      console.log("error!!!!!!!", error);
+      console.error("Error occurred while fetching access token:", error);
     }
 
-    // Call test api get. 
 
 
     // Go to Vehicle Information Page
