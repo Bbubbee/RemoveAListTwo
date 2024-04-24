@@ -3,13 +3,12 @@ import React, { SetStateAction } from 'react'
 import { Text, View } from '@/components/Themed';
 import { Button, Linking, Pressable, StyleSheet, TextInput } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, usePathname } from 'expo-router';
 import axios from 'axios';
-
-import { Buffer } from "buffer";
 
 
 import { SelectList } from 'react-native-dropdown-select-list'
+import { VehicleDetails } from '@/app/types';
 
 
 
@@ -29,45 +28,48 @@ const NewVehicle = () => {
     { key: '6', value: 'South Australia' },
   ]
 
-  function encodeToBase64(toEncode: string) {
-    const Buffer = require("buffer").Buffer;
-    const encodedString = new Buffer(toEncode).toString('base64');
+  function parseVehicleData(data: any) {
+    let vehicleData: VehicleDetails = {
+      type: data.result[0].body_type,
+      make: data.result[0].make,
+      model: data.result[0].model,
+      vin: data.result[0].vin,
+    }
 
-    return encodedString;
+    return vehicleData
   }
 
   async function handle_press() {
+    // TODO: Error check input. 
+    // TODO: Disable button once pressed. 
 
-    // TODO: Might only need to get access token once. 
-    // Variables to get access token. 
-    const accessTokenUrl = "https://api.onegov.nsw.gov.au/oauth/client_credential/accesstoken?grant_type=client_credentials";
-    const apiKey = "O4DgzjFyGAEMHSdhNuEgulu7Ln2D3NkE";
-    const apiSecret = "hsLAJStVQCGAUj8W";
-    const credentials = apiKey + ":" + apiSecret;
-
-    // Try and get access token.
+    // Get Vehicle Details using BlueFlag. 
     try {
-      const result = await axios.get(accessTokenUrl, {
-        headers: { 'Authorization': "Basic " + encodeToBase64(credentials) }
+      const plateNumber = "TEST00";
+      const state = "VIC";
+      const url = `https://sandbox.blueflag.com.au/nevdis/vehicle_details?plate=${plateNumber}&state=${state}&include_nvic=true`;
+      const result = await axios.get(url, {
+        headers: { 'Authorization': "secret_SANDBOX_f1nlZOh0Xr1JvMgJy0d0l9i5JybnBEAYfl7isuU0_o-1GkBsaN8f" }
       });
-      console.log(result.data);
 
-      // Success getting access token! 
-      const accessToken = result.data['access_token']
-      console.log(accessToken);
+      // Parse the data into an object.
+      const vehicleData = parseVehicleData(result.data)
 
-      // Try and get 
+      // TODO: Store the data in the backend. Retrieve it with it's id to access it. 
 
-      // Failed to get access token. 
-    } catch (error) {
-      console.error("Error occurred while fetching access token:", error);
+      // Go to Vehicle Information Page
+      router.back()
+      router.push({
+        pathname: "/(pages)/Vehicles/VehicleInfo",
+        params: { data: vehicleData.vin }
+      })
+
+    }
+    catch (err) {
+      console.log("Error: ", err);
     }
 
 
-
-    // Go to Vehicle Information Page
-    router.back()
-    router.push("/(pages)/Vehicles/VehicleInfo")
 
     return
   }
