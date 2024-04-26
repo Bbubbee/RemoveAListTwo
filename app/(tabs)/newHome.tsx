@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View } from '@/components/Themed';
-import Services from '@/components/Services';
+import Services from './Services';
 import { StyleSheet } from 'react-native';
 
 

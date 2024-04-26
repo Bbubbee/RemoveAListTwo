@@ -1,16 +1,17 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, TextInput, StyleSheet } from 'react-native'
 import React, { ReactNode } from 'react'
 
 
 interface Props {
-  children: ReactNode
+  children: ReactNode,
+  title: string
 }
 
-const InfoItem = ({ children }: Props) => {
+const InfoItem = ({ children, title }: Props) => {
   return (
     <View>
       <Text style={styles.name}>{children}</Text>
-      <Text style={styles.content}>Sample Text</Text>
+      <TextInput style={styles.content}>{title}</TextInput>
       <View style={styles.divider}></View>
     </View>
   )

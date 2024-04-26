@@ -31,7 +31,7 @@ const Services = () => {
 
         <View style={styles.box}>
           <TouchableOpacity style={styles.inner} onPress={() => {
-            router.push("/(pages)/Vehicles/NewVehicle")
+            router.push("/(pages)/Vehicles/VehicleHome")
           }}>
             <FontAwesome6 name="car-on" size={24} color="black" />
             <Text>Vehicle/Vessel</Text>

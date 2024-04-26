@@ -1,0 +1,34 @@
+[
+  {
+    "plateNumber": "TEST00",
+    "state": "VIC",
+    "type": "CAR/SEDAN",
+    "make": "HYUNDAI",
+    "model": "I30",
+    "vin": "KMHH351EMKU00TEST",
+    "colour": "SILVER OR CHROME",
+    "engineNumber": "G40000000000"
+  },
+
+  {
+    "plateNumber": "TEST01",
+    "state": "VIC",
+    "type": "LIGHT COMMERCIAL",
+    "make": "Mitsubishi",
+    "model": "Triton",
+    "vin": "MMAJJKL10HH00TEST",
+    "colour": "WHITE",
+    "engineNumber": "4N000000000"
+  },
+
+  {
+    "plateNumber": "TEST21",
+    "state": "VIC",
+    "type": "CAR/SEDAN",
+    "make": "MERC B",
+    "model": "300E",
+    "vin": "WDB1240312B00TEST",
+    "colour": "RED",
+    "engineNumber": "10498022000000"
+  }
+]

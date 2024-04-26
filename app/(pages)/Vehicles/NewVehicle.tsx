@@ -1,19 +1,13 @@
 
 import React, { SetStateAction } from 'react'
 import { Text, View } from '@/components/Themed';
-import { Button, Linking, Pressable, StyleSheet, TextInput } from 'react-native';
+import { Pressable, StyleSheet, TextInput } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { router, usePathname } from 'expo-router';
+import { router } from 'expo-router';
 import axios from 'axios';
-
 
 import { SelectList } from 'react-native-dropdown-select-list'
 import { VehicleDetails } from '@/app/types';
-
-
-
-
-
 
 const NewVehicle = () => {
   const [state, setState] = React.useState("");
@@ -29,6 +23,8 @@ const NewVehicle = () => {
   ]
 
   function parseVehicleData(data: any) {
+    console.log(data.result);
+
     let vehicleData: VehicleDetails = {
       type: data.result[0].body_type,
       make: data.result[0].make,
@@ -45,7 +41,7 @@ const NewVehicle = () => {
 
     // Get Vehicle Details using BlueFlag. 
     try {
-      const plateNumber = "TEST00";
+      const plateNumber = "TEST21";
       const state = "VIC";
       const url = `https://sandbox.blueflag.com.au/nevdis/vehicle_details?plate=${plateNumber}&state=${state}&include_nvic=true`;
       const result = await axios.get(url, {
@@ -56,20 +52,19 @@ const NewVehicle = () => {
       const vehicleData = parseVehicleData(result.data)
 
       // TODO: Store the data in the backend. Retrieve it with it's id to access it. 
+      // Maybe create a temporary back end to hold data. 
 
       // Go to Vehicle Information Page
       router.back()
       router.push({
         pathname: "/(pages)/Vehicles/VehicleInfo",
-        params: { data: vehicleData.vin }
+        params: { vin: vehicleData.vin, something: 'lolllll' }
       })
 
     }
     catch (err) {
       console.log("Error: ", err);
     }
-
-
 
     return
   }
@@ -84,11 +79,9 @@ const NewVehicle = () => {
       </Text>
       <TextInput style={styles.input} onChangeText={newText => { setRegoNumber(newText) }} />
 
-
       <Text style={styles.body}>
         Select Your State
       </Text>
-
 
       <View style={styles.stateContainer}>
         <SelectList
