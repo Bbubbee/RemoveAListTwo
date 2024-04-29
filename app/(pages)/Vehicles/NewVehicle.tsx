@@ -11,7 +11,8 @@ import { VehicleDetails } from '@/app/types';
 
 const NewVehicle = () => {
   const [state, setState] = React.useState("");
-  const [regoNumber, setRegoNumber] = React.useState("None");
+  const [plateNumber, setPlateNumber] = React.useState("None");
+  const [showError, setShowError] = React.useState(false);
 
   const states = [
     { key: '1', value: 'New South Wales' },
@@ -20,6 +21,8 @@ const NewVehicle = () => {
     { key: '4', value: 'Victoria' },
     { key: '5', value: 'Western Australia' },
     { key: '6', value: 'South Australia' },
+    { key: '7', value: 'Northern Territory' },
+    { key: '8', value: 'Australian Capital Territory' },
   ]
 
   function parseVehicleData(data: any) {
@@ -39,11 +42,53 @@ const NewVehicle = () => {
     // TODO: Error check input. 
     // TODO: Disable button once pressed. 
 
+    // Format state for use in API. 
+    let stateToCheck: String = "";
+    switch (state) {
+      case "New South Wales": {
+        stateToCheck = "NSW";
+        break;
+      }
+      case "Queensland": {
+        stateToCheck = "QLD";
+        break;
+      }
+      case 'Tasmania': {
+        stateToCheck = "TAS";
+        break;
+      }
+      case 'Victoria': {
+        stateToCheck = "VIC";
+        break;
+      }
+      case 'Western Australia': {
+        stateToCheck = "WA";
+        break;
+      }
+      case 'South Australia': {
+        stateToCheck = "SA";
+        break;
+      }
+      case 'Northern Territory': {
+        stateToCheck = "NT";
+        break;
+      }
+      case 'Australian Capital Territory': {
+        stateToCheck = "ACT";
+        break;
+      }
+      default: {
+        stateToCheck = "DEFAULT STATE CODE";
+        break;
+      }
+    }
+
     // Get Vehicle Details using BlueFlag. 
     try {
-      const plateNumber = "TEST21";
-      const state = "VIC";
-      const url = `https://sandbox.blueflag.com.au/nevdis/vehicle_details?plate=${plateNumber}&state=${state}&include_nvic=true`;
+      console.log(plateNumber, stateToCheck);
+
+      // const plateNumber = "TEST21";
+      const url = `https://sandbox.blueflag.com.au/nevdis/vehicle_details?plate=${plateNumber}&state=${stateToCheck}&include_nvic=true`;
       const result = await axios.get(url, {
         headers: { 'Authorization': "secret_SANDBOX_f1nlZOh0Xr1JvMgJy0d0l9i5JybnBEAYfl7isuU0_o-1GkBsaN8f" }
       });
@@ -64,6 +109,7 @@ const NewVehicle = () => {
     }
     catch (err) {
       console.log("Error: ", err);
+      setShowError(true);
     }
 
     return
@@ -73,11 +119,11 @@ const NewVehicle = () => {
     <View style={styles.container}>
 
       <Text style={styles.body}>
-        Enter Your Vehicle Identification Number (VIN)
+        Enter Your Plate Number
         {"\n"}OR {"\n"}
         Your Registration Number
       </Text>
-      <TextInput style={styles.input} onChangeText={newText => { setRegoNumber(newText) }} />
+      <TextInput style={styles.input} onChangeText={newText => { setPlateNumber(newText) }} />
 
       <Text style={styles.body}>
         Select Your State
@@ -95,14 +141,14 @@ const NewVehicle = () => {
         />
       </View>
 
-
       <Pressable onPress={() => handle_press()} style={styles.lookupButton} >
         <Text style={styles.buttonText}>Get Info</Text>
         <FontAwesome6 name="magnifying-glass-arrow-right" size={24} color="white" />
       </Pressable>
+      {showError && <Text style={styles.errorText}>Unable to Retrieve Vehicle Details.{"\n"}Please verify the entered license plate number and try again.</Text>}
 
 
-    </View>
+    </View >
   )
 }
 
@@ -163,6 +209,14 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 15,
     backgroundColor: '#E8E6E6',
+  },
+
+  errorText: {
+    textAlign: 'center',
+    alignSelf: 'center',
+    color: 'red',
+    marginTop: 15,
+    fontSize: 16
   }
 });
 
