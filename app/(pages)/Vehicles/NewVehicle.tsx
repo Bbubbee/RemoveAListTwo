@@ -1,7 +1,7 @@
 
 import React, { SetStateAction } from 'react'
 import { Text, View } from '@/components/Themed';
-import { Pressable, StyleSheet, TextInput } from 'react-native';
+import { Pressable, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import axios from 'axios';
@@ -12,6 +12,7 @@ import { VehicleDetails } from '@/app/types';
 const NewVehicle = () => {
   const [state, setState] = React.useState("");
   const [plateNumber, setPlateNumber] = React.useState("None");
+  const [isLoading, setIsLoading] = React.useState(false)
   const [showError, setShowError] = React.useState(false);
 
   const states = [
@@ -41,6 +42,8 @@ const NewVehicle = () => {
   async function handle_press() {
     // TODO: Error check input. 
     // TODO: Disable button once pressed. 
+
+    setIsLoading(true);
 
     // Format state for use in API. 
     let stateToCheck: String = "";
@@ -98,6 +101,7 @@ const NewVehicle = () => {
 
       // TODO: Store the data in the backend. Retrieve it with it's id to access it. 
       // Maybe create a temporary back end to hold data. 
+      setIsLoading(false);
 
       // Go to Vehicle Information Page
       router.back()
@@ -106,11 +110,15 @@ const NewVehicle = () => {
         params: { vin: vehicleData.vin, something: 'lolllll' }
       })
 
+
     }
     catch (err) {
+      setIsLoading(false);
+
       console.log("Error: ", err);
       setShowError(true);
     }
+
 
     return
   }
@@ -141,11 +149,23 @@ const NewVehicle = () => {
         />
       </View>
 
-      <Pressable onPress={() => handle_press()} style={styles.lookupButton} >
-        <Text style={styles.buttonText}>Get Info</Text>
-        <FontAwesome6 name="magnifying-glass-arrow-right" size={24} color="white" />
-      </Pressable>
-      {showError && <Text style={styles.errorText}>Unable to Retrieve Vehicle Details.{"\n"}Please verify the entered license plate number and try again.</Text>}
+      {!isLoading ? (
+        // Show search button. 
+        <Pressable onPress={() => handle_press()} style={styles.lookupButton} >
+          <Text style={styles.buttonText}>Get Info</Text>
+          <FontAwesome6 name="magnifying-glass-arrow-right" size={24} color="white" />
+        </Pressable>
+      ) : (
+        // Show loading spinner.
+        <ActivityIndicator style={styles.spinner} size={'large'} />
+      )}
+
+
+
+
+
+      {/* Error text */}
+      {showError && <Text style={styles.errorText}>Unable to Retrieve Vehicle Details.{"\n"}Please verify the plate number and state and try again.</Text>}
 
 
     </View >
@@ -217,6 +237,11 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: 15,
     fontSize: 16
+  },
+
+  spinner: {
+    alignSelf: 'center',
+    marginTop: 35,
   }
 });
 
